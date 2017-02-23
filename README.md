@@ -1,23 +1,27 @@
 # Room ID parser
 
+Room-ID-Parser is sample project which parses `Strings` to determine if a room is valid.
 
+## Run Room-ID-parser
 
+Package and run the jar with maven (clean to remove all old data in target-dir):
 
-## Start Room-ID-parser
-
-Package the jar with maven (clean to remove all old data in target-dir):
-
-```mvn clean package```
-
-Then run the application with:
-
-```java -jar room-id-parser-1.0.0-SNAPSHOT.jar```
+`mvn clean package exec:java`
 
 This will boot up the spring boot-app and will make the rest interface accessible
 
 ## Use Room-ID-Parser
 
-Fire the following URL to determine the SUM of all real room-ids.
+You can access [http://localhost:8080/](http://localhost:8080/) and upload the file *roomids.txt*.
+ 
+The file is located in `src/test/resources/`.
+
+## Routes in in the Room-ID-Parser
+
+* `/` index page
+* `/parser/rooms` parses the *roomids.txt* file with a POST
+* `/parser/count` count the roomnumbers of the *valid* rooms
+
 
 
 

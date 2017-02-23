@@ -6,7 +6,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +43,7 @@ public class RoomIdParserServiceTest {
     private RoomIdParserService service;
 
     @Test
-    public void testRoomIdService() {
+    public void testDetermineValidRoomIds() {
         String fileName = "roomids.txt";
 
         InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
@@ -59,6 +58,22 @@ public class RoomIdParserServiceTest {
 
         assertEquals(337, validRoomIds.size());
 
+    }
+
+    @Test
+    public void testCalculateNumberOfValidRooms() {
+        String fileName = "roomids.txt";
+
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+
+        List<Room> validRoomIds = null;
+
+        try {
+            validRoomIds = service.determineValidRoomIds(inputStream);
+        } catch (UserException|IOException err) {
+            log.error(err);
+        }
+
         int value = 0;
 
         try {
@@ -70,6 +85,7 @@ public class RoomIdParserServiceTest {
         assertEquals(185371, value);
 
     }
+
 
 
 

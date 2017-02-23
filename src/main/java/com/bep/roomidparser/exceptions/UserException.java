@@ -1,7 +1,5 @@
 package com.bep.roomidparser.exceptions;
 
-import org.apache.catalina.User;
-
 /**
  * @author sido
  */

@@ -1,6 +1,5 @@
 package com.bep.roomidparser.domain;
 
-import com.bep.roomidparser.services.RoomIdParserServiceImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

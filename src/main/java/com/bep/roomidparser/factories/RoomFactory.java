@@ -6,6 +6,10 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,7 +21,29 @@ public class RoomFactory {
 
     private static final Log log = LogFactory.getLog(RoomFactory.class);
 
-    public static Room generateRoomCharacteristics(String line) {
+    public static List<Room> determineRooms(InputStream inputStream) throws IOException {
+        List<Room> validRoomIds = new ArrayList<Room>();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            int inValidRoomsCount = 0;
+            while ((line = br.readLine()) != null) {
+                log.debug("Line to be examined: [ " + line + " ]");
+                Room room = RoomFactory.generateRoomCharacteristics(line);
+                if(room.isValid()) {
+                    validRoomIds.add(room);
+                } else {
+                    inValidRoomsCount++;
+                }
+            }
+            log.debug("invalid room count is: [ " + inValidRoomsCount + " ]");
+        } catch (IOException err) {
+            log.error(err);
+            throw err;
+        }
+        return validRoomIds;
+    }
+
+    private static Room generateRoomCharacteristics(String line) {
         Room room = new Room();
         StringBuilder stringToEvaluate = new StringBuilder();
         String[] roomIdSubs = line.split("\\-");
