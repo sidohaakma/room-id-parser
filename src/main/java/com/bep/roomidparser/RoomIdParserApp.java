@@ -16,11 +16,12 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @author sido
  *
  */
-@SpringBootApplication
+@ComponentScan
+@EnableAutoConfiguration
 public class RoomIdParserApp {
 
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(RoomIdParserApp.class);
+        SpringApplication.run(RoomIdParserApp.class, args);
     }
 
 

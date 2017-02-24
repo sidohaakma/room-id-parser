@@ -19,8 +19,11 @@ The file is located in `src/test/resources/`.
 ## Routes in in the Room-ID-Parser
 
 * `/` index page
-* `/parser/rooms` parses the *roomids.txt* file with a POST
-* `/parser/count` count the roomnumbers of the *valid* rooms
+  * Shows index.html from resources directory (`src/main/resources/templates`)
+* `/parser/rooms` 
+  * parses the *roomids.txt* file with a POST
+* `/parser/result` 
+  * Shows results.html from resources directory (`src/main/resources/templates`)
 
 
 
