@@ -2,7 +2,7 @@ package com.bep.roomidparser.controllers;
 
 import com.bep.roomidparser.domain.Room;
 import com.bep.roomidparser.services.RoomIdParserService;
-import exceptions.RoomIdParserException;
+import com.bep.roomidparser.exceptions.RoomIdParserException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**

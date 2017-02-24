@@ -1,12 +1,9 @@
 package com.bep.roomidparser.services;
 
 import com.bep.roomidparser.domain.Room;
-import exceptions.RoomIdParserException;
+import com.bep.roomidparser.exceptions.RoomIdParserException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 /**

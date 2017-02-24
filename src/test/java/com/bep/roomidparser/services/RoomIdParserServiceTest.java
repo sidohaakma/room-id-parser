@@ -1,8 +1,7 @@
 package com.bep.roomidparser.services;
 
 import com.bep.roomidparser.domain.Room;
-import exceptions.RoomIdParserException;
-import org.apache.commons.compress.utils.IOUtils;
+import com.bep.roomidparser.exceptions.RoomIdParserException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
