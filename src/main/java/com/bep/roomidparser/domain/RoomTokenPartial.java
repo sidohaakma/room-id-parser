@@ -1,16 +1,19 @@
 package com.bep.roomidparser.domain;
 
 /**
+ *
+ * <p>A subset of the room-id-string that has to be evaluated.</p>
+ *
  * @author sido
  */
-public class RoomPartial implements Comparable<RoomPartial> {
+public class RoomTokenPartial implements Comparable<RoomTokenPartial> {
 
     private String key = "";
     private int count = 0;
 
-    public RoomPartial() {}
+    public RoomTokenPartial() {}
 
-    public RoomPartial(String key, int count) {
+    public RoomTokenPartial(String key, int count) {
         this.key = key;
         this.count = count;
     }
@@ -32,7 +35,7 @@ public class RoomPartial implements Comparable<RoomPartial> {
     }
 
     @Override
-    public int compareTo(RoomPartial comparable) {
+    public int compareTo(RoomTokenPartial comparable) {
         int returnValue = 0;
         if (this.count > comparable.count) {
             returnValue = -1;
@@ -46,9 +49,9 @@ public class RoomPartial implements Comparable<RoomPartial> {
 
     @Override
     public boolean equals(Object object) {
-        RoomPartial rp = new RoomPartial();
-        if(object instanceof RoomPartial) {
-            rp = (RoomPartial) object;
+        RoomTokenPartial rp = new RoomTokenPartial();
+        if(object instanceof RoomTokenPartial) {
+            rp = (RoomTokenPartial) object;
         }
         boolean value = false;
         if(rp.getKey().equalsIgnoreCase(this.getKey())) {

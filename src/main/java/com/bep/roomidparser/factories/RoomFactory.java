@@ -1,7 +1,7 @@
 package com.bep.roomidparser.factories;
 
 import com.bep.roomidparser.domain.Room;
-import com.bep.roomidparser.domain.RoomPartial;
+import com.bep.roomidparser.domain.RoomTokenPartial;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,12 +15,23 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ *
+ * <p>Static methods to handle the room-id strings.</p>
+ *
  * @author sido
  */
 public class RoomFactory {
 
     private static final Log log = LogFactory.getLog(RoomFactory.class);
 
+  /**
+   *
+   * <p>Determine per room if it's valid and add it to a list</p>
+   *
+   * @param inputStream file of room-id's
+   * @return List<Room> list of valid room-id's
+   * @throws IOException
+   */
     public static List<Room> determineRooms(InputStream inputStream) throws IOException {
         List<Room> validRoomIds = new ArrayList<Room>();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -43,6 +54,14 @@ public class RoomFactory {
         return validRoomIds;
     }
 
+  /**
+   *
+   * <p>Generate per room-id string a set of characteristics of the room.</p>
+   * <p>Secondly fill the POJO with these characteristics.</p>
+   *
+   * @param line room-id string
+   * @return Room with characterstics
+   */
     private static Room generateRoomCharacteristics(String line) {
         Room room = new Room();
         StringBuilder stringToEvaluate = new StringBuilder();
@@ -62,7 +81,7 @@ public class RoomFactory {
             }
         }
         room.setTokenToBeEvaluated(stringToEvaluate.toString());
-        room.setRoomPartials(generateRoomPartialsList(room.getTokenToBeEvaluated()));
+        room.setRoomTokenPartials(generateRoomPartialsList(room.getTokenToBeEvaluated()));
         log.debug("token to be evaluated: [ " + room.getTokenToBeEvaluated() + " ]");
         log.debug("evaluation token: [ " + room.getEvaluationToken() + " ]");
         log.debug("parsed evaluation token: [ " + room.getParsedEvaluationToken() + " ]");
@@ -71,11 +90,18 @@ public class RoomFactory {
         return room;
     }
 
-    private static List<RoomPartial> generateRoomPartialsList(String roomId) {
-        List<RoomPartial> roomPartials = new ArrayList<RoomPartial>();
+  /**
+   *
+   * <p>Determine the RoomTokenPartials. RoomTokenPartials are needed to determine the evaluationToken of the Room.</p>
+   *
+   * @param roomId room-id string which contains the RoomTokenPartials
+   * @return List<RoomTokenPartials> list of room-token-partials to determine the evaluationToken
+   */
+    private static List<RoomTokenPartial> generateRoomPartialsList(String roomId) {
+        List<RoomTokenPartial> roomPartials = new ArrayList<RoomTokenPartial>();
         for(int index = 0; index < roomId.length(); index++) {
             String key = String.valueOf(roomId.charAt(index));
-            RoomPartial rp = new RoomPartial(key, StringUtils.countMatches(roomId, key));
+            RoomTokenPartial rp = new RoomTokenPartial(key, StringUtils.countMatches(roomId, key));
             if(!roomPartials.contains(rp)) {
                 roomPartials.add(rp);
             }

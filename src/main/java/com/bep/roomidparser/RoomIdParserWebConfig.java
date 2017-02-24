@@ -6,6 +6,9 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
+ *
+ * <p>Configures web-jars to load bootstrap.</p>
+ *
  * @author sido
  */
 @Configuration

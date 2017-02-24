@@ -11,7 +11,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 /**
  *
  *
- * <p>Starting point of REST-API from room-id-starter</p>
+ * <p>Starting point of room-id-parser</p>
  *
  * @author sido
  *

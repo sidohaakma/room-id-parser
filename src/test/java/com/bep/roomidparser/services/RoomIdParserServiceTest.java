@@ -1,7 +1,8 @@
 package com.bep.roomidparser.services;
 
 import com.bep.roomidparser.domain.Room;
-import com.bep.roomidparser.exceptions.UserException;
+import exceptions.RoomIdParserException;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -9,10 +10,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -20,73 +24,85 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by sido on 14-2-17.
+ * <p>Test service calls for room-id-parser.</p>
+ *
+ * @author sido
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class RoomIdParserServiceTest {
 
-    private static final Log log = LogFactory.getLog(RoomIdParserServiceTest.class);
+  private static final Log LOG = LogFactory.getLog(RoomIdParserServiceTest.class);
 
-    @Configuration
-    static class ContextConfiguration {
+  @Autowired
+  private RoomIdParserService service;
 
-        // this bean will be injected into the OrderServiceTest class
-        @Bean
-        public RoomIdParserService orderService() {
-            RoomIdParserService roomIdParserService = new RoomIdParserServiceImpl();
-            return roomIdParserService;
-        }
+  @Test
+  public void testDetermineValidRoomIds() {
+    InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("roomids.txt");
+
+    MultipartFile roomIds = null;
+
+    try {
+      roomIds = new MockMultipartFile("file", stream);
+    } catch (IOException err) {
+      LOG.error(err);
     }
 
-    @Autowired
-    private RoomIdParserService service;
+    List<Room> validRoomIds = null;
 
-    @Test
-    public void testDetermineValidRoomIds() {
-        String fileName = "roomids.txt";
-
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
-
-        List<Room> validRoomIds = null;
-
-        try {
-            validRoomIds = service.determineValidRoomIds(inputStream);
-        } catch (UserException|IOException err) {
-            log.error(err);
-        }
-
-        assertEquals(337, validRoomIds.size());
-
+    try {
+      validRoomIds = service.determineValidRoomIds(roomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
     }
 
-    @Test
-    public void testCalculateNumberOfValidRooms() {
-        String fileName = "roomids.txt";
+    assertEquals(337, validRoomIds.size());
 
-        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+  }
 
-        List<Room> validRoomIds = null;
+  @Test
+  public void testCalculateNumberOfValidRooms() {
+    InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("roomids.txt");
 
-        try {
-            validRoomIds = service.determineValidRoomIds(inputStream);
-        } catch (UserException|IOException err) {
-            log.error(err);
-        }
+    MultipartFile roomIds = null;
 
-        int value = 0;
-
-        try {
-            value = service.calculateNumberOfValidRooms(validRoomIds);
-        } catch (UserException err) {
-            log.error(err);
-        }
-
-        assertEquals(185371, value);
-
+    try {
+      roomIds = new MockMultipartFile("file", stream);
+    } catch (IOException err) {
+      LOG.error(err);
     }
 
+    List<Room> validRoomIds = null;
 
+    try {
+      validRoomIds = service.determineValidRoomIds(roomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
+    }
+
+    int value = 0;
+
+    try {
+      value = service.calculateNumberOfValidRooms(validRoomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
+    }
+
+    assertEquals(185371, value);
+
+  }
+
+  @Configuration
+  static class ContextConfiguration {
+
+    // this bean will be injected into the OrderServiceTest class
+    @Bean
+    public RoomIdParserService orderService() {
+      RoomIdParserService roomIdParserService = new RoomIdParserServiceImpl();
+      return roomIdParserService;
+    }
+  }
 
 
 }

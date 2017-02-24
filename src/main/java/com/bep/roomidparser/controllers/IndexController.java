@@ -6,15 +6,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
- * <p>Used to generate the </p>
+ * <p>Used to generate the starting point of the Room-ID-parser.</p>
  *
  * @author sido
  */
 @Controller
 public class IndexController {
 
-      @RequestMapping("/")
-      public String index() {
+  /**
+   * <p>Starting point of the Room-ID-parser.</p>
+   *
+   * @return index.html
+   */
+  @RequestMapping("/")
+  public String index() {
   return "index";
 }
 
