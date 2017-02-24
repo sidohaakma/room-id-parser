@@ -17,10 +17,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
 
+    private static final String REDIRECT_KEY_ATTRIBUTE_MESSAGE = "message";
+
     @ExceptionHandler(MultipartException.class)
     public String handleFileUploadError(MultipartException e, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("message", e.getCause().getMessage());
-        return "redirect:/parserStatus";
+        redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_MESSAGE, e.getCause().getMessage());
+        return "redirect:/parser/result";
 
     }
 

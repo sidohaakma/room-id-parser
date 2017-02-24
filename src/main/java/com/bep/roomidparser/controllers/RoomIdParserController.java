@@ -7,10 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -42,7 +39,7 @@ public class RoomIdParserController {
    * @param redirectAttributes you can add messages to the view with these attributes
    * @return RedirectView to load frontend redirect urls
    */
-  @PostMapping("/rooms")
+  @RequestMapping(method = RequestMethod.POST, path = "/rooms")
   @ResponseBody
   public RedirectView parseRoomIds(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
