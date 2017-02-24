@@ -28,9 +28,13 @@ public class RoomIdParserController {
   private static final String REDIRECT_KEY_ATTRIBUTE_MESSAGE = "message";
   private static final String REDIRECT_KEY_ATTRIBUTE_VALID_ROOMS = "validRooms";
   private static final String REDIRECT_KEY_ATTRIBUTE_COUNT_ROOMS = "countNumberRooms";
+  private static final String REDIRECT_KEY_ATTRIBUTE_SECTOR_ID = "sectorId";
+
 
   @Autowired
   private RoomIdParserService service;
+
+  private List<Room> roomIds;
 
   /**
    * <p>Parses the room-ids. This results in the determination of valid rooms and a count of the room-numbers.</p>
@@ -50,9 +54,8 @@ public class RoomIdParserController {
 
     int countNumberOfValidRooms;
 
-
     try {
-      List<Room> roomIds = service.determineValidRoomIds(file);
+      roomIds = service.determineValidRoomIds(file);
       countNumberOfValidRooms = service.calculateNumberOfValidRooms(roomIds);
       redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_MESSAGE, "All rooms have been examined (file used is: [ " + file.getOriginalFilename() + " ])");
       redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_VALID_ROOMS, "The total count of the valid rooms is : [ " + roomIds.size() + " ]");
@@ -60,6 +63,34 @@ public class RoomIdParserController {
     } catch (RoomIdParserException e) {
       LOG.error(e);
       redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_MESSAGE, "Something went wrong when the rooms were examined");
+    }
+
+    return new RedirectView("/parser/result", true);
+  }
+
+  /**
+   *
+   *
+   *
+   * @param roomName
+   * @param redirectAttributes
+   * @return
+   */
+  @RequestMapping(method = RequestMethod.GET, path = "parser/decrypt")
+  public RedirectView decryptRoomNames(@RequestParam("roomName") String roomName, RedirectAttributes redirectAttributes) {
+
+    List<Room> decryptedRoomIds = null;
+
+    try {
+      decryptedRoomIds = service.decryptRoomNamesOfValidRooms(roomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
+      redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_MESSAGE, "Something went wrong when the rooms were decrypted");
+    }
+    for(Room room : decryptedRoomIds) {
+      if(room.getDecryptedName().equalsIgnoreCase(roomName)) {
+        redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE_SECTOR_ID, String.valueOf(room.getSectorId()));
+      }
     }
 
     return new RedirectView("/parser/result", true);

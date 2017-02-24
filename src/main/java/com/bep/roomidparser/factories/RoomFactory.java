@@ -117,11 +117,19 @@ public class RoomFactory {
         return roomPartials;
     }
 
-    public static String decryptRoomName(String evaluationToken, int sectorId) {
+    /**
+     *
+     * <p>Decrypt a room name from cypher-encryption.</p>
+     *
+     * @param rawTokenToBeEvaluated the token with the dashes and without the sectorId
+     * @param sectorId sectorId is the key for the cypher-encryption
+     * @return decrypted room name
+     */
+    public static String decryptRoomName(String rawTokenToBeEvaluated, int sectorId) {
         StringBuilder actualName = new StringBuilder();
 
-        for(int index = 0; index < evaluationToken.length(); index++) {
-            String character = String.valueOf(evaluationToken.charAt(index));
+        for(int index = 0; index < rawTokenToBeEvaluated.length(); index++) {
+            String character = String.valueOf(rawTokenToBeEvaluated.charAt(index));
             if(character.matches("^[a-zA-Z]*$")) {
                 actualName.append(decryptCharacter(character, sectorId));
             } else {
@@ -132,6 +140,14 @@ public class RoomFactory {
         return actualName.toString();
     }
 
+    /**
+     *
+     * <p>Determine next character to complemete decryption room name.</p>
+     *
+     * @param character character from rawTokenToBeEvaluated
+     * @param sectorId sectorId is the key for the cypher-encryption
+     * @return decrypted character
+     */
     private static String decryptCharacter(String character, int sectorId) {
         String newCharacter = "";
 
