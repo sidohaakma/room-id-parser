@@ -33,4 +33,12 @@ public interface RoomIdParserService {
    * @throws RoomIdParserException
    */
   int calculateNumberOfValidRooms(List<Room> validRoomIds) throws RoomIdParserException;
+
+  /**
+   *
+   * @param rooms
+   * @return
+   * @throws RoomIdParserException
+   */
+  List<Room> decryptRoomNamesOfValidRooms(List<Room> rooms) throws RoomIdParserException;
 }

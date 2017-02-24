@@ -55,10 +55,24 @@ public class RoomIdParserServiceImpl implements RoomIdParserService {
   public int calculateNumberOfValidRooms(List<Room> validRoomIds) throws RoomIdParserException {
     int value = 0;
     for (Room room : validRoomIds) {
-      value += room.getNumber();
+      value += room.getSectorId();
     }
     return value;
   }
+
+  @Override
+  public List<Room> decryptRoomNamesOfValidRooms(List<Room> rooms) throws RoomIdParserException {
+    List<Room> roomsWithDecryptedNames = new ArrayList<Room>();
+
+    for(Room room : rooms) {
+      room.setDecryptedName(RoomFactory.decryptRoomName(room.getRawTokenToBeEvaluated(), room.getSectorId()));
+      roomsWithDecryptedNames.add(room);
+    }
+
+    return roomsWithDecryptedNames;
+  }
+
+
 
 
 }

@@ -15,9 +15,11 @@ public class Room {
   private static final Log LOG = LogFactory.getLog(Room.class);
 
   private String tokenToBeEvaluated = "";
+  private String rawTokenToBeEvaluated = "";
   private String parsedEvaluationToken = "";
   private String evaluationToken = "";
-  private int number = -1;
+  private String decryptedName = "";
+  private int sectorId = -1;
   private List<RoomTokenPartial> roomTokenPartials;
 
 
@@ -29,6 +31,14 @@ public class Room {
     this.tokenToBeEvaluated = tokenToBeEvaluated;
   }
 
+  public String getRawTokenToBeEvaluated() {
+    return rawTokenToBeEvaluated;
+  }
+
+  public void setRawTokenToBeEvaluated(String rawTokenToBeEvaluated) {
+    this.rawTokenToBeEvaluated = rawTokenToBeEvaluated;
+  }
+
   public String getEvaluationToken() {
     return evaluationToken;
   }
@@ -37,12 +47,20 @@ public class Room {
     this.evaluationToken = evaluationToken;
   }
 
-  public int getNumber() {
-    return number;
+  public int getSectorId() {
+    return sectorId;
   }
 
-  public void setNumber(int number) {
-    this.number = number;
+  public void setSectorId(int sectorId) {
+    this.sectorId = sectorId;
+  }
+
+  public String getDecryptedName() {
+    return decryptedName;
+  }
+
+  public void setDecryptedName(String decryptedName) {
+    this.decryptedName = decryptedName;
   }
 
   public List<RoomTokenPartial> getRoomPartials() {

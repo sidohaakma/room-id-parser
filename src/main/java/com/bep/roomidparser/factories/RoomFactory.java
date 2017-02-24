@@ -22,7 +22,9 @@ import java.util.List;
  */
 public class RoomFactory {
 
-    private static final Log log = LogFactory.getLog(RoomFactory.class);
+    private static final Log LOG = LogFactory.getLog(RoomFactory.class);
+
+    private static final String ALPHABET = "abcdefghikjlmnopqrstuvwxyz";
 
   /**
    *
@@ -38,7 +40,7 @@ public class RoomFactory {
             String line;
             int inValidRoomsCount = 0;
             while ((line = br.readLine()) != null) {
-                log.debug("Line to be examined: [ " + line + " ]");
+                LOG.debug("Line to be examined: [ " + line + " ]");
                 Room room = RoomFactory.generateRoomCharacteristics(line);
                 if(room.isValid()) {
                     validRoomIds.add(room);
@@ -46,9 +48,9 @@ public class RoomFactory {
                     inValidRoomsCount++;
                 }
             }
-            log.debug("invalid room count is: [ " + inValidRoomsCount + " ]");
+            LOG.debug("invalid room count is: [ " + inValidRoomsCount + " ]");
         } catch (IOException err) {
-            log.error(err);
+            LOG.error(err);
             throw err;
         }
         return validRoomIds;
@@ -65,15 +67,18 @@ public class RoomFactory {
     private static Room generateRoomCharacteristics(String line) {
         Room room = new Room();
         StringBuilder stringToEvaluate = new StringBuilder();
+        StringBuilder rawStringToEvaluate = new StringBuilder();
         String[] roomIdSubs = line.split("\\-");
         for(String roomIdSub : roomIdSubs) {
             if(roomIdSub.matches("^[a-zA-Z]*$")) {
                 stringToEvaluate.append(roomIdSub);
+                rawStringToEvaluate.append(roomIdSub);
+                rawStringToEvaluate.append("-");
             } else {
                 String[] roomTokenSubs = roomIdSub.split("\\[");
                 for(String roomTokenSub : roomTokenSubs) {
                     if(roomTokenSub.matches("^[0-9]*$")) {
-                        room.setNumber(Integer.valueOf(roomTokenSub));
+                        room.setSectorId(Integer.valueOf(roomTokenSub));
                     } else {
                         room.setEvaluationToken(roomTokenSub.substring(0, roomTokenSub.length() - 1));
                     }
@@ -81,12 +86,14 @@ public class RoomFactory {
             }
         }
         room.setTokenToBeEvaluated(stringToEvaluate.toString());
+        room.setRawTokenToBeEvaluated(rawStringToEvaluate.toString().substring(0, rawStringToEvaluate.length() - 1));
         room.setRoomTokenPartials(generateRoomPartialsList(room.getTokenToBeEvaluated()));
-        log.debug("token to be evaluated: [ " + room.getTokenToBeEvaluated() + " ]");
-        log.debug("evaluation token: [ " + room.getEvaluationToken() + " ]");
-        log.debug("parsed evaluation token: [ " + room.getParsedEvaluationToken() + " ]");
-        log.debug("number: [ " + room.getNumber() + " ]");
-        log.debug("status: [ " + room.isValid() + " ]");
+        LOG.debug("token to be evaluated: [ " + room.getTokenToBeEvaluated() + " ]");
+        LOG.debug("raw-token to be evaluated: [ " + room.getRawTokenToBeEvaluated() + " ]");
+        LOG.debug("evaluation token: [ " + room.getEvaluationToken() + " ]");
+        LOG.debug("parsed evaluation token: [ " + room.getParsedEvaluationToken() + " ]");
+        LOG.debug("number: [ " + room.getSectorId() + " ]");
+        LOG.debug("status: [ " + room.isValid() + " ]");
         return room;
     }
 
@@ -110,5 +117,33 @@ public class RoomFactory {
         return roomPartials;
     }
 
+    public static String decryptRoomName(String evaluationToken, int sectorId) {
+        StringBuilder actualName = new StringBuilder();
+
+        for(int index = 0; index < evaluationToken.length(); index++) {
+            String character = String.valueOf(evaluationToken.charAt(index));
+            if(character.matches("^[a-zA-Z]*$")) {
+                actualName.append(decryptCharacter(character, sectorId));
+            } else {
+                actualName.append(" ");
+            }
+        }
+
+        return actualName.toString();
+    }
+
+    private static String decryptCharacter(String character, int sectorId) {
+        String newCharacter = "";
+
+        int index = ALPHABET.indexOf(character);
+        int countToEndOfAlphabet = ALPHABET.length() - index;
+        int numberLeft = sectorId - countToEndOfAlphabet;
+        int alphabetCount = numberLeft / ALPHABET.length();
+
+        numberLeft = sectorId - ((alphabetCount * ALPHABET.length()) + countToEndOfAlphabet);
+        newCharacter = String.valueOf(ALPHABET.charAt(numberLeft));
+
+        return newCharacter;
+    }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -88,6 +89,41 @@ public class RoomIdParserServiceTest {
     }
 
     assertEquals(185371, value);
+
+  }
+
+  @Test
+  public void testDecryptRoomNamesOfValidRooms() {
+    InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("roomids.txt");
+
+    MultipartFile roomIds = null;
+
+    try {
+      roomIds = new MockMultipartFile("file", stream);
+    } catch (IOException err) {
+      LOG.error(err);
+    }
+
+    List<Room> validRoomIds = null;
+
+    try {
+      validRoomIds = service.determineValidRoomIds(roomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
+    }
+
+    List<Room> decyptedRooms = new ArrayList<Room>();
+
+    try {
+      decyptedRooms = service.decryptRoomNamesOfValidRooms(validRoomIds);
+    } catch (RoomIdParserException err) {
+      LOG.error(err);
+    }
+
+    for(Room room : decyptedRooms) {
+      LOG.info("Decrypted room | name : [ " + room.getDecryptedName() + " ] sectorId [" + room.getSectorId() + "]");
+    }
+
 
   }
 
