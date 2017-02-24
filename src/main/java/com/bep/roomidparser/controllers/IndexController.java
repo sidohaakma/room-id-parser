@@ -7,14 +7,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author sido
  */
-//@Controller
-//@RequestMapping("/")
+@Controller
 public class IndexController {
 
-//    @RequestMapping("/")
-//    @ResponseBody
-    public String home() {
-        return "Welcome to the Room-id-parser";
-    }
+      @RequestMapping("/")
+      public String index() {
+  return "index";
+}
+
+
+      @RequestMapping("/status")
+      public String status() {
+    return "status";
+  }
 
 }

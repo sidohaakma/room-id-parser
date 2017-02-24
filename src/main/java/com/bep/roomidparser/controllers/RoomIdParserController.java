@@ -21,27 +21,24 @@ import java.util.List;
  * @author sido
  */
 @Controller
+@RequestMapping("/parser")
 public class RoomIdParserController {
 
     private static final Log LOG = LogFactory.getLog(RoomIdParserController.class);
+
+    private static final String REDIRECT_KEY_ATTRIBUTE = "message";
 
     private int countNumberOfValidRooms;
 
     @Autowired
     private RoomIdParserService service;
 
-    @RequestMapping("/")
-    public String index() {
-        return "index";
-    }
-
     @PostMapping("/rooms")
     @ResponseBody
-    public String parseRoomIds(@RequestParam("file") MultipartFile file,
-                            RedirectAttributes redirectAttributes) {
+    public String parseRoomIds(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
             if (file.isEmpty()) {
-                redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
+                redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE, "Please select a file to upload");
                 return "redirect:/status";
             }
 
@@ -49,11 +46,12 @@ public class RoomIdParserController {
                 List<Room> roomIds = service.determineValidRoomIds(file.getInputStream());
                 countNumberOfValidRooms = service.calculateNumberOfValidRooms(roomIds);
 
-                redirectAttributes.addFlashAttribute("message", "All rooms have been examined [ " + file.getOriginalFilename() + " ]");
+                redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE, "All rooms have been examined [ " + file.getOriginalFilename() + " ]");
             } catch (IOException|UserException e) {
-                redirectAttributes.addFlashAttribute("message", "Something went wrong when the rooms were examined");
+                redirectAttributes.addFlashAttribute(REDIRECT_KEY_ATTRIBUTE, "Something went wrong when the rooms were examined");
                 LOG.error(e);
             }
+
             return "redirect:/status";
         }
 
@@ -62,12 +60,6 @@ public class RoomIdParserController {
     @ResponseBody
     public String countNumberOfValidRooms() {
         return "The sum of all room numbers is [ " + countNumberOfValidRooms + " ]";
-    }
-
-    @RequestMapping("/status")
-    @ResponseBody
-    public String parserStatus() {
-        return "status";
     }
 
 }
