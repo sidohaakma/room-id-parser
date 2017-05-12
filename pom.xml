@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.bep</groupId>
   <artifactId>room-id-parser</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.2-SNAPSHOT</version>
   <description>Spring Boot Starter Parent</description>
   <url>http://projects.spring.io/spring-boot/room-id-parser/</url>
   <organization>
@@ -47,7 +47,7 @@
   <scm>
     <connection>scm:git:https://github.com/sidohaakma/room-id-parser.git</connection>
     <developerConnection>scm:git:https://github.com/sidohaakma/room-id-parser.git</developerConnection>
-    <tag>1.0.2</tag>
+    <tag></tag>
     <url>scm:git:https://github.com/sidohaakma/room-id-parser.git</url>
   </scm>
   <properties>
