@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bep</groupId>
     <artifactId>room-id-parser</artifactId>
-    <version>1.1.7-SNAPSHOT</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
     <parent>
         <groupId>org.springframework.boot</groupId>
